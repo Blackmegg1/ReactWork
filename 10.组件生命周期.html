@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+</head>
+
+<body>
+    <div id="test"></div>
+    <script type="text/babel">
+        class Life extends React.Component {
+        state = {opacity:1}
+        dispear = () => {
+            ReactDOM.unmountComponentAtNode(document.getElementById('test')); //卸载组件的API
+        }
+        componentDidMount() {//与render同级，在组件挂载后通过实例调用
+                this.timer = setInterval(() => {
+                let  {opacity} = this.state;
+                opacity -= 0.1;
+                if(opacity <= 0) {
+                    opacity = 1;
+                }
+                this.setState({opacity});
+            }, 200);
+        }
+        componentWillUnmount() {//组件将要被卸载时调用
+            clearInterval(this.timer);
+        }
+        render() { 
+            return (
+            <div>
+                <h2 style={{opacity:this.state.opacity}}>学不会React怎么办啊？</h2>
+                <button onClick={this.dispear}>失业</button>
+                </div>
+            )
+        }
+    }
+    ReactDOM.render(<Life/>, document.getElementById('test'))//挂载
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>demo1</title>
+</head>
+<script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
+<script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+<body>
+    <div id="test"></div>
+
+    <script type="text/babel">
+        class Weather extends React.Component {
+        state = {isWet: true, wind: '微风',}
+
+        render() {
+            //读取状态
+            const isWet = this.state.isWet;
+            const wind = this.state.wind;
+            console.log(this)
+            return <h1 onClick={this.demo}>今天天气{isWet? "好潮湿":"好干燥"},{wind}</h1>
+        }
+
+        demo = ()=>{
+            console.log(this.state.isWet)
+            this.setState({isWet:!this.state.isWet});
+        }
+    }
+    ReactDOM.render(<Weather/>, document.getElementById("test"));
+    </script>
+
+</body>
+
+</html>

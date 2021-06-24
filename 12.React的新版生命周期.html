@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+</head>
+
+<body>
+    <div id="test"></div>
+    <script type="text/babel">
+        class Add extends React.Component {
+
+        constructor(props) {
+            console.log("Constructor called");
+            super(props);
+            this.state = {count: 0};
+        }
+        
+        componentDidMount() {
+            console.log("ComponentDidMount called");
+        }
+
+        static getDerivedStateFromProps(props,state) { //新钩子！！！！！！
+            console.log("getDerivedStateFromProps called", props, state);
+            return null
+        }
+
+        componentWillUnmount() {
+            console.log("ComponentWillUnmount called");
+        }
+        
+        shouldComponentUpdate() { //控制更新阀门
+            console.log("ShouldComponentUpdate called")
+            const {count} = this.state;
+            return (count <= 5);
+        }
+
+        getSnapshotBeforeUpdate() { //新钩子！！！！！！
+            console.log("getSnapshotBeforeUpdate called");
+            return "snapshot"
+        }
+
+        componentDidUpdate(prevProps, prevState, snapshot) {  //snapshot传递到componentDidUpdate当中了！！！
+            console.log("ComponentDidUpdate called", prevProps, prevState, snapshot);
+        }
+
+        add = () => {
+            const {count} = this.state;
+            this.setState({count:count+1});
+        }
+
+        dispear = () => {
+            ReactDOM.unmountComponentAtNode(document.getElementById('test'));
+        }
+
+        force = () => {
+            this.forceUpdate();
+        }
+
+        render() {
+            const {count} = this.state;
+            console.log("Render called");
+            return (
+                <div>
+                    <h2>当前求和为：{count}</h2>
+                    <button onClick={this.add}>加1</button>
+                    <button onClick={this.dispear}>消失</button>
+                    <button onClick={this.force}>强制更新</button>
+                    </div>
+            )
+        }
+    }
+        
+    ReactDOM.render(<Add count={222} />, document.getElementById('test'));
+    /*常用的钩子：1.componentDidMount() 初始化工作
+                 2.componentWillUnmount() 收尾工作
+                 3.render() 主要工作 */
+</script>
+
+</body>
+
+</html>

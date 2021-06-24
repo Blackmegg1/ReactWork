@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+</head>
+
+<body>
+    <div id="test"></div>
+    <script type="text/babel">
+    //比较的最小颗粒度是每个标签
+    class Timer extends React.Component {
+        state = {date:new Date()}
+
+        componentDidMount() {
+            setInterval(() => {
+                this.setState({date: new Date()});
+            }, 1000);
+        }
+
+        render() {
+            return (
+                <div>
+                <h1>Hello, admin</h1>
+                <input type="text"/>
+                <br/>
+                <span>现在是：{this.state.date.toTimeString()}</span>
+                </div>
+            )
+        }
+    }
+    
+    /*使用index作为key可能会引发的问题：
+        1.若对数据进行，逆序添加、逆序删除等破坏顺序的操作，会产生没有必要的真实DOM更新，界面没有影响，但是效率低
+        2.若结构中包含输入类DOM，引发问题      
+    */  
+    class Person extends React.Component {
+        state = {persons: [{name:'gxy',id:1,age:18},{name:'lg',id:2,age:19}]}
+
+        addPerson = () => {
+            const perv = this.state.persons.length;
+            console.log(perv)
+            this.setState({persons:[{name:'lq',id:perv,age:19},...this.state.persons]})
+        }
+
+        render() {
+            return (
+                <div>
+                    <button onClick={this.addPerson}>添加人物</button>
+                    <ul>
+                        {
+                            this.state.persons.map((p, index) => {
+                            return <li key={index   }>{`${p.name}__${p.age}_${p.id}`}</li>
+                        })
+                    }
+                        </ul>
+                    </div>
+            )
+        }
+    }
+    ReactDOM.render(<Person/>, document.getElementById('test'));
+    </script>
+    
+</body>
+
+</html>

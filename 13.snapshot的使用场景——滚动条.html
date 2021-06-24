@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+</head>
+<style>
+    .list {
+        width: 200px;
+        height: 300px;
+        background-color: pink;
+        overflow: auto;
+    }
+
+    .news {
+        width: 200px;
+        height: 50px;
+    }
+</style>
+
+<body>
+    <div id="test"></div>
+    <script type="text/babel">
+    /*
+    
+        关于render新的生命周期函数：
+        1.组件初始化阶段：
+            1) constructor() 构造器
+            2) getDerivedStateFromProps(props, state) 得到来自props的派生state
+            3) render() 渲染
+            4) componentDidMount() 组件已挂载
+        2.组件状态更新阶段，由组件this.state或父组件重渲染触发：
+            1) getDerivedStateFromProps(props, state)
+            2) shouldComponentUpdate() 决定是否执行此次更新
+            3) render() 渲染
+            5) getSnapshotBeforeUpdate() 在更新前获取此刻组件快照，可以在componentDidUpdate中接受到快照
+            4) componentDidUpdate(prevProps, propState, snapshot) 组件完成更新 
+        3.组件卸载阶段，由ReactDOM.unmountComponentAtNode()触发：
+            1) componentWillUnmount()
+
+    */
+        class NewsList extends React.Component {
+
+        state = {newsarr:[]}
+
+        componentDidMount() {
+            setInterval(() => {
+                //获取原state
+                const {newsarr} = this.state;
+                //生成新news
+                const news = `news${newsarr.length+1}`;
+                //更新state
+                this.setState({newsarr:[news,...newsarr]});
+            }, 1000);
+        }
+
+        getSnapshotBeforeUpdate() {
+            console.log("height",this.list.scrollHeight);
+            return this.list.scrollHeight
+        }
+
+        componentDidUpdate(prevProps, prevState, snapshot) { //这个hook的第三个参数即为snapshot
+            this.list.scrollTop += this.list.scrollHeight - snapshot; //本例中每条内容高度固定，因此快照在这里的作用不明显
+        }
+
+        render() {
+            return (
+                <div className="list" ref={ (currentNode) => {this.list = currentNode}}>
+                    {
+                        this.state.newsarr.map((n, index) => { //每次render时遍历newsarr
+                            return <div className="news" key={index+1}>{n}</div>
+                        })
+                    }
+                        </div>
+            )
+        }
+    }
+    ReactDOM.render(<NewsList/>, document.getElementById('test'));
+    </script>
+
+</body>
+
+</html>

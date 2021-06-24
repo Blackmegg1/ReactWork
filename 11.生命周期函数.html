@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+</head>
+
+<body>
+    <div id="test"></div>
+    <script type="text/babel">
+        class Add extends React.Component {
+
+        constructor(props) {
+            console.log("Constructor called");
+            super(props);
+            this.state = {count: 0};
+        }
+        
+        UNSAFE_componentWillMount() {
+            console.log("ComponentWillMount called");
+        }
+
+        componentDidMount() {
+            console.log("ComponentDidMount called");
+        }
+
+        componentWillUnmount() {
+            console.log("ComponentWillUnmount called");
+        }
+        
+        shouldComponentUpdate() { //控制更新阀门 
+            console.log("ShouldComponentUpdate called")
+            const {count} = this.state;
+            return (count <= 5);
+        }
+
+        UNSAFE_componentWillUpdate() {
+            console.log("ComponentWillUpdate called");
+        }
+
+        componentDidUpdate() {
+            console.log("ComponentDidUpdate called");
+        }
+
+        add = () => {
+            const {count} = this.state;
+            this.setState({count:count+1});
+        }
+
+        dispear = () => {
+            ReactDOM.unmountComponentAtNode(document.getElementById('test'));
+        }
+
+        force = () => {
+            this.forceUpdate();
+        }
+
+        render() {
+            const {count} = this.state;
+            console.log("Render called");
+            return (
+                <div>
+                    <h2>当前求和为：{count}</h2>
+                    <button onClick={this.add}>加1</button>
+                    <button onClick={this.dispear}>消失</button>
+                    <button onClick={this.force}>强制更新</button>
+                    </div>
+            )
+        }
+    }
+        class A extends React.Component { //A组件是B组件的父组件
+            state = {carName:"BC"}
+
+            changeCar = () => {
+                const {carName} = this.state;
+                this.setState({carName: "OTTO"});
+            }
+            render() {
+                console.log("A render")
+                return (
+                    <div> 
+                    <div>A</div>
+                    <button onClick={this.changeCar}>change my car</button>
+                    <B carName={this.state.carName}/>
+                    </div>
+                )
+            }
+        }
+        class B extends React.Component {
+            //组件将要接受新的props
+            componentWillReceiveProps() {
+                console.log("B received props");
+            }   
+            render() {
+                return (
+                    <div>我是B，车是{this.props.carName}</div>
+                )
+            }
+        }
+    ReactDOM.render(<A/>, document.getElementById('test'));
+    /*常用的钩子：1.componentDidMount() 初始化工作
+                 2.componentWillUnmount() 收尾工作
+                 3.render() 主要工作 */
+</script>
+
+</body>
+
+</html>
