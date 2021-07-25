@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2</title>
+</head>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<body>
+    <div class="div">
+        <h2>基本使用</h2>
+        <button>发送GET</button>
+        <button>发送POST</button>
+        <button>发送PUT</button>
+        <button>发送DELETE</button>
+    </div>
+</body>
+<script>
+    const btns = document.querySelectorAll('button');
+    //查看文章
+    btns[0].onclick = () => {
+        axios({
+            method: 'GET',
+            //url为用json-server创建的http服务器
+            url: 'http://localhost:3000/posts/1', 
+        }).then((res) => {
+            console.log(res);
+        });
+    }
+
+    //发布文章
+    btns[1].onclick = () => {
+        axios({
+            method: 'POST',
+            url: "http://localhost:3000/posts",
+            data: {
+                title: 'new POST',
+                author: 'gxy',
+            }
+        }).then((res) => {
+            console.log(res)
+        })
+    }
+
+    //更新文章
+    btns[2].onclick = () => {
+        axios({
+            method: 'PUT',
+            url: 'http://localhost:3000/posts/2',
+            data: {
+                title: 'update article',
+                author: 'gxy',
+            }
+        }).then((res) => {
+            console.log(res);
+        })
+    }
+
+    //删除文章
+    btns[3].onclick = () => {
+        axios({
+            method: 'delete',
+            url: 'http://localhost:3000/posts/2',
+        }).then((res) => {
+            console.log(res);
+        })
+    }
+</script>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3</title>
+</head>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<body>
+    <div class="div">
+        <h2>请求的取消</h2>
+        <button>发送GET</button>
+        <button>取消请求</button>
+    </div>
+</body>
+<script>
+    const btns = document.querySelectorAll('button');
+
+    //创建全局变量 cancel
+    let cancel = null;
+
+    //发送请求
+    btns[0].onclick = () => {
+        if(cancel !== null) {
+             cancel();   
+            }
+        axios({
+            method: 'GET',
+            //url为用json-server创建的http服务器
+            url: 'http://localhost:3000/posts/1', 
+            cancelToken: new axios.CancelToken((c) => {
+                cancel = c;
+            })
+        }).then((res) => {
+            cancel = null;
+            console.log(res);
+        });
+    }
+
+    //取消请求
+    btns[1].onclick = () => {
+        console.log('请求取消')
+        cancel();
+    }
+
+    
+</script>
+</html>
