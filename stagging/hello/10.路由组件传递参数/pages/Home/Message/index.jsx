@@ -9,22 +9,7 @@ export default class Message extends Component {
             { id: '03', title: '消息3' },
         ]
     }
-    //编程式路由跳转
-    pushShow = (id, title) => {
-        this.props.history.push('/home/message/detail', { id, title })
-    }
 
-    replaceShow = (id, title) => {
-        this.props.history.replace('/home/message/detail', { id, title })
-    }
-
-    goBack = () => {
-        this.props.history.go(-1);
-    }
-
-    goForward = () => {
-        this.props.history.go(1);
-    }
     render() {
         return (
             <div>
@@ -41,9 +26,7 @@ export default class Message extends Component {
                                     <Link to={`/home/message/detail/?id=${message.id}&title=${message.title}`}>{message.title}</Link> */}
 
                                     {/* 向路由组件传递state参数 */}
-                                    <Link to={{ pathname: '/home/message/detail', state: { id: message.id, title: message.title } }}>{message.title}</Link>
-                                    &nbsp;<button onClick={() => this.pushShow(message.id, message.title)}>push</button>
-                                    &nbsp;<button onClick={() => this.replaceShow(message.id, message.title)}>replace</button>
+                                    <Link to={{ pathname:'/home/message/detail', state:{ id: message.id, title: message.title } }}>{message.title}</Link>
                                 </li>
                             )
                         })
@@ -56,8 +39,6 @@ export default class Message extends Component {
                 <Route path='/home/message/detail' component={Detail} /> */}
                 {/* 路由组件接受state参数 */}
                 <Route path='/home/message/detail' component={Detail} />
-                <button onClick={this.goBack}>back</button>
-                <button onClick={this.goForward}>forward</button>
             </div >
         )
     }
